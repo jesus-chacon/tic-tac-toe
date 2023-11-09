@@ -7,8 +7,6 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "eslint": "^8.53.0",
     "sass": "^1.69.5",

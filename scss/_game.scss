@@ -1,0 +1,91 @@
+.tic_toc {
+  &__turn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > svg {
+      margin-left: 10px;
+    }
+  }
+
+  &__board {
+    border-spacing: 8px;
+    margin: 0 auto;
+    width: 100%;
+
+    tr {
+      white-space: nowrap;
+    }
+    td {
+      /* hacer las celdas cuadradas dado un ancho*/
+      width: 30%;
+      height: 0px;
+      padding-bottom: 30%;
+
+      border-radius: 2px;
+      box-shadow: 0 2px 4px 0 rgba(121, 122, 122, 0.4);
+      position: relative;
+
+      &.cell-o {
+        background-color: $base-back-o;
+      }
+
+      &.cell-x {
+        background-color: $base-back-x;
+      }
+
+      .icon-x,
+      .icon-o {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        height: 60%;
+      }
+    }
+  }
+
+  &__score {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+
+    &__x,
+    &__o {
+      display: flex;
+      flex-grow: 2;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__x {
+      justify-content: end;
+    }
+
+    &__o {
+      justify-content: start;
+    }
+  }
+
+  &__reset_btn {
+    @extend .typo, .typo_semi;
+
+    width: 100%;
+    background-color: #29ddb9;
+    color: white;
+    font-size: 18px;
+    line-height: 22px;
+    letter-spacing: -0.23px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($color: #29ddb9, $amount: 10);
+    }
+  }
+}

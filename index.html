@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <svg
@@ -43,34 +50,48 @@
       </defs>
     </svg>
 
-    <h1 class="text-center">tic tac toe</h1>
+    <div class="tic_toc">
+      <h1 class="text-center typo_high_xl">tic tac toe</h1>
 
-    <hr />
+      <hr />
 
-    <p>
-      Turno de:
-      <span>
-        <svg id="next-player-o" width="50" height="50" version="2.0">
+      <div class="tic_toc__turn">
+        <p class="typo_high_m">Turno de:</p>
+
+        <svg id="next-player-o" width="24" height="24" version="2.0" class="icon-o">
           <use href="#icon-o" />
         </svg>
-      </span>
 
-      <span>
-        <svg id="next-player-x" width="50" height="50" version="2.0">
+        <svg id="next-player-x" width="24" height="24" version="2.0" class="icon-x">
           <use href="#icon-x" />
         </svg>
-      </span>
-    </p>
+      </div>
 
-    <div>
-      <table id="game-table"></table>
+      <table id="game-table" class="tic_toc__board"></table>
+
+      <h2 class="text-center typo_high_l">Puntuación</h2>
+
+      <div class="tic_toc__score">
+        <div class="tic_toc__score__x">
+          <svg id="next-player-x" width="32" height="32" version="2.0" class="icon-x">
+            <use href="#icon-x" />
+          </svg>
+
+          <p class="typo_high_xl">- <span id="x-wins">0</span></p>
+        </div>
+
+        <div class="tic_toc__score__o">
+          <svg id="next-player-o" width="32" height="32" version="2.0" class="icon-o">
+            <use href="#icon-o" />
+          </svg>
+
+          <p class="typo_high_xl">- <span id="o-wins">0</span></p>
+        </div>
+      </div>
+
+      <button id="reset-game" class="tic_toc__reset_btn">Nuevo juego</button>
     </div>
 
-    <div>
-      <h2 class="text-center">Puntuación</h2>
-
-      <p>X gana: <span id="x-wins">0</span></p>
-      <p>O gana: <span id="o-wins">0</span></p>
-    </div>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

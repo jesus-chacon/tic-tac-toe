@@ -1,8 +1,22 @@
-import "./styles.scss";
+import "./scss/main.scss";
 
 const getById = (id) => {
+  console.log(id);
   return document.getElementById(id);
 };
+
+const showById = (id) => {
+  getById(id).classList.remove("hide");
+};
+
+const hideById = (id) => {
+  getById(id).classList.add("hide");
+};
+const getSvgHTML = (type) => `
+<svg width="50" height="50" version="2.0" class="icon-${type}">
+  <use href="#icon-${type}" />
+</svg>
+`;
 
 const getBaseState = () => ({
   player: "x",
@@ -16,6 +30,7 @@ const getBaseState = () => ({
 
 // Función para rellenar el tablero en blanco
 function setupBoard() {
+  console.log("Setup board");
   const boardLength = currentGameState.board.length;
   const table = document.getElementById("game-table");
   const isSetup = table.rows.length === 0;
@@ -33,7 +48,7 @@ function setupBoard() {
         cell.innerHTML = "";
       } else {
         table.rows[i].cells[j].innerHTML = "";
-        table.rows[i].cells[j].classList.remove("winner");
+        table.rows[i].cells[j].classList.remove("winner", "cell-x", "cell-o");
       }
     }
   }
@@ -52,8 +67,8 @@ function nextPlayer(currentPlayer) {
 function updateNextPlayer(currentPlayer) {
   const player = nextPlayer(currentPlayer);
 
-  getById(`next-player-${currentPlayer}`).addClass("hide");
-  getById(`next-player-${player}`).classList.remove("hide");
+  hideById(`next-player-${currentPlayer}`);
+  showById(`next-player-${player}`);
 
   currentGameState.player = player;
 }
@@ -116,11 +131,13 @@ function findWinner(player, row, col) {
 function updateWinner(winner) {
   if (winner === "x") {
     currentGameState.xWins++;
-    document.getElementById("x-wins").innerHTML = currentGameState.xWins;
+    getById("x-wins").innerHTML = currentGameState.xWins;
   } else {
     currentGameState.oWins++;
-    document.getElementById("o-wins").innerHTML = currentGameState.yWins;
+    getById("o-wins").innerHTML = currentGameState.yWins;
   }
+
+  showById("reset-game");
 }
 
 // Función para manejar el evento onClick
@@ -133,7 +150,8 @@ function onClickPosition() {
   if (board[row][col] === null && currentGameState.winner === null) {
     const currentPlayer = currentGameState.player.toString();
 
-    this.innerHTML = currentGameState.player;
+    this.innerHTML = getSvgHTML(currentPlayer);
+    this.classList.add(`cell-${currentPlayer}`);
 
     currentGameState.board[row][col] = currentPlayer;
     const winner = findWinner(currentPlayer, row, col);
@@ -145,7 +163,8 @@ function onClickPosition() {
 
       alert(`${winner} WINS!!!`);
     } else if (checkTie(currentGameState.board)) {
-      alert("TIE!!");
+      alert("Empate !!");
+      showById("reset-game");
     } else {
       updateNextPlayer(currentGameState.player);
     }
@@ -154,6 +173,7 @@ function onClickPosition() {
 
 // Función para reiniciar el juego
 function reset() {
+  console.log("Reset Game");
   currentGameState = {
     ...currentGameState,
     ...getBaseState(),
@@ -161,6 +181,7 @@ function reset() {
 
   setupBoard();
   updateNextPlayer("o");
+  hideById("reset-game");
 }
 
 // Función para determinar si hay un empate
@@ -176,19 +197,23 @@ function checkTie(state) {
   return true;
 }
 
-let currentGameState = {
-  ...getBaseState(),
-  xWins: 0,
-  yWins: 0,
+const init = () => {
+  currentGameState = {
+    ...getBaseState(),
+    xWins: 0,
+    yWins: 0,
+  };
+
+  setupBoard();
+  updateNextPlayer("o");
+  getById("reset-game").onclick = reset;
+  hideById("reset-game");
 };
 
-setupBoard();
+let currentGameState = null;
 
-// Añadir botón "Nuevo juego"
-const newGameButton = document.createElement("button");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Init game");
 
-newGameButton.innerHTML = "Nuevo juego";
-// Añadir evento onClick al botón "Nuevo juego"
-newGameButton.onclick = reset;
-
-document.body.prepend(newGameButton);
+  init();
+});

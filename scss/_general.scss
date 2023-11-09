@@ -1,0 +1,32 @@
+body,
+html {
+  background-color: white;
+  font-family: "Montserrat", sans-serif;
+}
+
+h1,
+h2 {
+  font-weight: 800;
+}
+
+p {
+  font-weight: 300;
+}
+
+body {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+svg.icon-o {
+  stroke: $base-color-o;
+}
+
+svg.icon-x {
+  fill: $base-color-x;
+}
+
+hr {
+  border-color: #e2e5e9;
+}

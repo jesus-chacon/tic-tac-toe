@@ -1,0 +1,40 @@
+.typo {
+  font-family: "Montserrat", sans-serif;
+}
+
+.typo_high {
+  font-weight: 800;
+  letter-spacing: normal;
+}
+
+.typo_semi {
+  font-weight: 600;
+  letter-spacing: normal;
+}
+
+.typo {
+  &_high {
+    &_xl {
+      @extend .typo, .typo_high;
+
+      line-height: 26px;
+      font-size: 24px;
+      letter-spacing: -0.25px;
+    }
+
+    &_l {
+      @extend .typo, .typo_high;
+
+      line-height: 20px;
+      font-size: 24px;
+      letter-spacing: -0.25px;
+    }
+
+    &_m {
+      @extend .typo, .typo_high;
+
+      line-height: 16px;
+      font-size: 12px;
+    }
+  }
+}
