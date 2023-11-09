@@ -1,143 +1,170 @@
 import "./styles.scss";
 
-const BASE_STATE = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
+const getById = (id) => {
+  return document.getElementById(id);
+};
 
-let state = BASE_STATE;
+const getBaseState = () => ({
+  player: "x",
+  winner: null,
+  board: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+});
 
-let currentPlayer = "x";
-let winner = null;
-let xWins = 0;
-let oWins = 0;
+// Función para rellenar el tablero en blanco
+function setupBoard() {
+  const boardLength = currentGameState.board.length;
+  const table = document.getElementById("game-table");
+  const isSetup = table.rows.length === 0;
 
-// Función para rellenar el tablero según el estado del juego
-function populate(state) {
-  let table = document.getElementById("game-table");
+  for (let i = 0; i < boardLength; i++) {
+    if (isSetup) {
+      table.insertRow(i);
+    }
 
-  for (let i = 0; i < state.length; i++) {
-    let row = table.insertRow(i);
+    for (let j = 0; j < boardLength; j++) {
+      if (isSetup) {
+        let cell = table.rows[i].insertCell(j);
 
-    for (let j = 0; j < state[i].length; j++) {
-      let cell = row.insertCell(j);
-
-      cell.innerHTML = state[i][j];
+        cell.onclick = onClickPosition;
+        cell.innerHTML = "";
+      } else {
+        table.rows[i].cells[j].innerHTML = "";
+        table.rows[i].cells[j].classList.remove("winner");
+      }
     }
   }
 }
 
 // Función para determinar qué jugador debe ser el siguiente
-function nextPlayer(state) {
-  let xCount = 0;
-  let oCount = 0;
-
-  for (let i = 0; i < state.length; i++) {
-    for (let j = 0; j < state[i].length; j++) {
-      if (state[i][j] === "x") {
-        xCount++;
-      } else if (state[i][j] === "o") {
-        oCount++;
-      }
-    }
-  }
-
-  if (xCount === oCount) {
-    return "x";
-  } else {
+function nextPlayer(currentPlayer) {
+  if (currentPlayer === "x") {
     return "o";
+  } else {
+    return "x";
   }
+}
+
+// Función para actualizar el jugador siguiente
+function updateNextPlayer(currentPlayer) {
+  const player = nextPlayer(currentPlayer);
+
+  getById(`next-player-${currentPlayer}`).addClass("hide");
+  getById(`next-player-${player}`).classList.remove("hide");
+
+  currentGameState.player = player;
 }
 
 // Función para determinar si hay un ganador en el juego actual
-function findWinner(state) {
-  let winner = null;
-  // Chequear filas
-  for (let i = 0; i < state.length; i++) {
-    if (state[i][0] === state[i][1] && state[i][1] === state[i][2]) {
-      winner = state[i][0];
+function findWinner(player, row, col) {
+  // Si ha ganado alguien lo sabremos por que tiene que estar relacionado con la posición en la que ha clicado
+  // de esta forma nos ahorramos tantos bucles
+  const board = currentGameState.board;
+  const boardLength = currentGameState.board.length;
+
+  let i = 0;
+
+  // Check current column
+  while (i < boardLength && i !== -1) {
+    if (board[i][col] === player) {
+      i++;
+    } else {
+      i = -1;
     }
   }
 
-  // Chequear columnas
-  for (let i = 0; i < state.length; i++) {
-    if (state[0][i] === state[1][i] && state[1][i] === state[2][i]) {
-      winner = state[0][i];
+  // Check winner
+  if (i >= boardLength) return player;
+
+  i = 0;
+
+  // Check current row
+  while (i < boardLength && i !== -1) {
+    if (board[row][i] === player) {
+      i++;
+    } else {
+      i = -1;
     }
   }
 
-  // Chequear diagonales
-  if (state[0][0] === state[1][1] && state[1][1] === state[2][2]) {
-    winner = state[0][0];
+  // Check winner
+  if (i >= boardLength) return player;
+
+  // Check diagonal
+  if (col !== row) return null;
+
+  i = 0;
+
+  // Check current row
+  while (i < boardLength && i !== -1) {
+    if (board[i][i] === player) {
+      i++;
+    } else {
+      i = -1;
+    }
   }
 
-  if (state[0][2] === state[1][1] && state[1][1] === state[2][0]) {
-    winner = state[0][2];
-  }
+  // Check winner
+  if (i >= boardLength) return player;
 
-  return winner;
+  return null;
 }
 
-function play() {
-  winner = findWinner(state);
-  if (winner) {
-    alert(winner + " wins!");
-    if (winner === "x") {
-      xWins++;
-    } else {
-      oWins++;
-    }
-    document.getElementById("x-wins").innerHTML = xWins;
-    document.getElementById("o-wins").innerHTML = oWins;
-  } else if (checkTie()) {
-    alert("Tie!");
+function updateWinner(winner) {
+  if (winner === "x") {
+    currentGameState.xWins++;
+    document.getElementById("x-wins").innerHTML = currentGameState.xWins;
   } else {
-    currentPlayer = nextPlayer(state);
-    document.getElementById("next-player").innerHTML = currentPlayer;
+    currentGameState.oWins++;
+    document.getElementById("o-wins").innerHTML = currentGameState.yWins;
   }
 }
 
 // Función para manejar el evento onClick
-function onClick() {
-  if (this.innerHTML === "" && winner === null) {
-    this.innerHTML = currentPlayer;
-    let row = this.parentNode.rowIndex;
-    let col = this.cellIndex;
-    state[row][col] = currentPlayer;
-    winner = findWinner(state);
+function onClickPosition() {
+  const row = this.parentNode.rowIndex;
+  const col = this.cellIndex;
+  const board = currentGameState.board;
+
+  // Puede jugar y está libre la posición
+  if (board[row][col] === null && currentGameState.winner === null) {
+    const currentPlayer = currentGameState.player.toString();
+
+    this.innerHTML = currentGameState.player;
+
+    currentGameState.board[row][col] = currentPlayer;
+    const winner = findWinner(currentPlayer, row, col);
+
+    // Check ganador, empate o continuar
     if (winner) {
       this.classList.add("winner");
-      play();
-    } else if (checkTie()) {
-      play();
+      updateWinner(winner);
+
+      alert(`${winner} WINS!!!`);
+    } else if (checkTie(currentGameState.board)) {
+      alert("TIE!!");
     } else {
-      currentPlayer = nextPlayer(state);
-      document.getElementById("next-player").innerHTML = currentPlayer;
+      updateNextPlayer(currentGameState.player);
     }
   }
 }
 
 // Función para reiniciar el juego
 function reset() {
-  state = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ];
-  currentPlayer = "x";
-  winner = null;
-  for (let i = 0; i < table.rows.length; i++) {
-    for (let j = 0; j < table.rows[i].cells.length; j++) {
-      table.rows[i].cells[j].innerHTML = "";
-      table.rows[i].cells[j].classList.remove("winner");
-    }
-  }
-  document.getElementById("next-player").innerHTML = currentPlayer;
+  currentGameState = {
+    ...currentGameState,
+    ...getBaseState(),
+  };
+
+  setupBoard();
+  updateNextPlayer("o");
 }
 
 // Función para determinar si hay un empate
-function checkTie() {
+function checkTie(state) {
   for (let i = 0; i < state.length; i++) {
     for (let j = 0; j < state[i].length; j++) {
       if (state[i][j] === null) {
@@ -145,71 +172,23 @@ function checkTie() {
       }
     }
   }
+
   return true;
 }
 
-// Rellenar el tablero según el estado del juego
-populate(state);
-
-// Asociar eventos a cada casilla del tablero
-let table = document.getElementById("game-table");
-
-for (let i = 0; i < table.rows.length; i++) {
-  for (let j = 0; j < table.rows[i].cells.length; j++) {
-    table.rows[i].cells[j].onclick = function () {
-      // Si la casilla está vacía y no hay un ganador
-      if (state[i][j] === null && winner === null) {
-        state[i][j] = currentPlayer;
-        this.innerHTML = currentPlayer;
-        winner = findWinner(state);
-
-        if (winner === "x") {
-          xWins++;
-          alert("X wins!");
-        } else if (winner === "o") {
-          oWins++;
-          alert("O wins!");
-        } else {
-          currentPlayer = nextPlayer(state);
-          document.getElementById("next-player").innerHTML = currentPlayer;
-        }
-
-        document.getElementById("x-wins").innerHTML = xWins;
-        document.getElementById("o-wins").innerHTML = oWins;
-      }
-    };
-  }
-}
-
-// Añadir botón "Nuevo juego"
-let newGameButton = document.createElement("button");
-newGameButton.innerHTML = "Nuevo juego";
-newGameButton.onclick = function () {
-  state = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ];
-  currentPlayer = "x";
-  winner = null;
-
-  for (let i = 0; i < table.rows.length; i++) {
-    for (let j = 0; j < table.rows[i].cells.length; j++) {
-      table.rows[i].cells[j].innerHTML = "";
-    }
-  }
-
-  document.getElementById("next-player").innerHTML = currentPlayer;
+let currentGameState = {
+  ...getBaseState(),
+  xWins: 0,
+  yWins: 0,
 };
 
-document.body.prepend(newGameButton);
+setupBoard();
 
-// Añadir eventos onClick a cada casilla del tablero
-for (let i = 0; i < table.rows.length; i++) {
-  for (let j = 0; j < table.rows[i].cells.length; j++) {
-    table.rows[i].cells[j].onclick = onClick;
-  }
-}
+// Añadir botón "Nuevo juego"
+const newGameButton = document.createElement("button");
 
+newGameButton.innerHTML = "Nuevo juego";
 // Añadir evento onClick al botón "Nuevo juego"
 newGameButton.onclick = reset;
+
+document.body.prepend(newGameButton);
