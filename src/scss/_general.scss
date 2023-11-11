@@ -15,16 +15,16 @@ p {
 
 body {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin: auto;
 }
 
 svg.icon-o {
-  stroke: $base-color-o;
+  stroke: var(--color-o);
 }
 
 svg.icon-x {
-  fill: $base-color-x;
+  fill: var(--color-x);
 }
 
 hr {
