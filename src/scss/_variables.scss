@@ -1,5 +1,14 @@
+$primary-color: #29ddb9;
+
 $base-back-x: #e5fffa;
 $base-color-x: #fa7064;
 
 $base-back-o: #fff3f2;
-$base-color-o: #29ddb9;
+$base-color-o: $primary-color;
+
+:root {
+  --color-x: #{$base-color-x};
+  --back-x: #{$base-back-x};
+  --color-o: #{$base-color-o};
+  --back-o: #{$base-back-o};
+}

@@ -1,6 +1,6 @@
 # tic-tac-toe
 
-En la resolución del juego Tic Tac Toe, prioricé no utilizar librerías externas y me centré en la reutilización del código y el testeo del mismo.
+En la resolución del juego Tic Tac Toe, prioricé no utilizar librerías externas y me centré en la reutilización del código y el testeo del mismo. He basado su solución en un sistema de clases para encapsular funcionalidad y mejorar la legibilidad del código
 
 ## Scripts
 
@@ -63,15 +63,11 @@ Cambié la gestión del estado global del juego y reduje el acceso al DOM.
 
 Agrupé el proceso de inicialización del juego.
 
-### `getBaseState`
-
-Proporciona un estado base del juego, una copia limpia del estado del juego en modo inicial, para no tener que repetirlo en la inicialización y el reset del juego.
-
 ### `PLAYER_X` y `PLAYER_O`
 
 Constantes para evitar valores directos dentro del código.
 
-### `findWinner`
+### `getWinner`
 
 Reducí las comprobaciones que se realizaban anteriormente, solo revisa la columna y la fila del último clic y la diagonal. Uso de un bucle `while` para terminar en caso de encontrar una celda diferente.
 
@@ -91,7 +87,7 @@ Implementé todos ellos usando SCSS para mejorar la reutilización y la calidad 
 
 ## Testing
 
-Añadí una pequeña batería de tests para validar parte de la funcionalidad implementada, principalmente en las funciones del fichero de utils.
+Añadí una pequeña batería de tests para validar parte de la funcionalidad implementada.
 
 ## Deploy
 
@@ -102,5 +98,4 @@ Opté por Docker para el despliegue del código, aprovechando su capacidad para 
 - **Uso de TypeScript**: Mejoraría el tipado y la descripción de interfaces y métodos.
 - **Implementación del cambio de color con un color picker básico**.
 - **Eliminación de la alerta y uso de una librería externa de popups**.
-- **Implementación completa del código utilizando Clases** para mejorar el testeo (mocks), hacer el código más legible y organizado.
 - **Utilización de algún framework**, como Nuejs (muy ligero) o Vue o React. De esta manera, gestionaríamos mejor los eventos

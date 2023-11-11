@@ -1,4 +1,12 @@
 .tic_toc {
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 34px;
+
+  hr {
+    margin-left: 6px;
+    margin-right: 6px;
+  }
   &__turn {
     display: flex;
     align-items: center;
@@ -17,6 +25,14 @@
     tr {
       white-space: nowrap;
     }
+
+    &.winner,
+    &.tie {
+      td {
+        cursor: default;
+      }
+    }
+
     td {
       /* hacer las celdas cuadradas dado un ancho*/
       width: 30%;
@@ -28,11 +44,11 @@
       position: relative;
 
       &.cell-o {
-        background-color: $base-back-o;
+        background-color: var(--back-o);
       }
 
       &.cell-x {
-        background-color: $base-back-x;
+        background-color: var(--back-x);
       }
 
       .icon-x,
@@ -73,7 +89,7 @@
     @extend .typo, .typo_semi;
 
     width: 100%;
-    background-color: #29ddb9;
+    background-color: $primary-color;
     color: white;
     font-size: 18px;
     line-height: 22px;
@@ -85,7 +101,28 @@
     cursor: pointer;
 
     &:hover {
-      background-color: darken($color: #29ddb9, $amount: 10);
+      background-color: darken($color: $primary-color, $amount: 10);
+    }
+  }
+
+  &__change_btn {
+    @extend .typo_high_m;
+
+    border: 1px solid $primary-color;
+    border-radius: 2px;
+    cursor: pointer;
+    background-color: white;
+    color: $primary-color;
+    padding: 8px 6px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: 6px;
+    display: block;
+
+    &:hover {
+      background-color: $primary-color;
+      color: white;
     }
   }
 }
