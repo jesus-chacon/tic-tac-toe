@@ -13,8 +13,10 @@
   "devDependencies": {
     "chai": "^4.3.10",
     "eslint": "^8.53.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "jsdom": "^22.1.0",
     "mocha": "^10.2.0",
+    "prettier": "^3.0.3",
     "sass": "^1.69.5",
     "vite": "^4.5.0"
   },
